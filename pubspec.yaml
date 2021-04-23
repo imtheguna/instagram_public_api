@@ -1,7 +1,7 @@
 name: instagram_public_api
 description: Flutter package to get Instagram user details and download posts.
-version: 0.0.2
-homepage: https://github.com/twin-eng/instagram_public_api
+version: 0.0.3
+homepage: https://github.com/imtheguna/instagram_public_api
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
