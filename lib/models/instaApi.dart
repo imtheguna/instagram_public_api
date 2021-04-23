@@ -5,6 +5,22 @@ import 'package:http/http.dart' as http;
 import 'package:instagram_public_api/models/instaData.dart';
 
 class FlutterInsta {
+  PostTime secToMin(double time) {
+    if (time == 0 || time == null) {
+      return PostTime(duration: "0.0", unit: "S");
+    }
+    if (time < 60) {
+      return PostTime(duration: time.toStringAsFixed(2), unit: "S");
+    } else if (time >= 3600) {
+      double sanp = time / 3600;
+      return PostTime(duration: sanp.toStringAsFixed(2), unit: "H");
+    } else if (time >= 60) {
+      double sanp = time / 60;
+      return PostTime(duration: sanp.toStringAsFixed(2), unit: "M");
+    }
+  }
+
+  ///get post details [post] must be publicc
   Future<List<InstaPost>> getPostData(String link) async {
     final url = "$link/?__a=1";
     List listUrl = url.split("/");
@@ -17,7 +33,7 @@ class FlutterInsta {
         listUrl[4] +
         "/" +
         listUrl[6];
-
+    print(postUrl);
     final res = await http.get(Uri.parse(postUrl));
     String body = res.body;
     if (body.startsWith('<!DOCTYPE html>')) {
@@ -46,8 +62,8 @@ class FlutterInsta {
       instaPost.add(InstaPost(
           postUrl: postUrl,
           video_duration: postType == PostType.GraphVideo
-              ? post["video_duration"].toString()
-              : "0.0",
+              ? secToMin(post["video_duration"])
+              : secToMin(0.0),
           thumbnailDimensions: Dimensions(
             height: post["display_resources"][0]["config_height"],
             width: post["display_resources"][0]["config_width"],
@@ -76,10 +92,8 @@ class FlutterInsta {
         instaPost.add(InstaPost(
           postUrl: postUrl,
           video_duration: postType == PostType.GraphVideo
-              ? snap[i]["node"]["video_duration"] == null
-                  ? ''
-                  : snap[i]["node"]["video_duration"].toString()
-              : "0.0",
+              ? secToMin(snap[i]["node"]["video_duration"])
+              : secToMin(0.0),
           thumbnailDimensions: Dimensions(
             height: snap[i]["node"]["display_resources"][0]["config_height"],
             width: snap[i]["node"]["display_resources"][0]["config_width"],
@@ -100,7 +114,7 @@ class FlutterInsta {
     }
   }
 
-  //get profile details
+  ///get profile details [username] must be public
   Future<InstaProfileData> getProfileData(String username) async {
     final url = "https://www.instagram.com/$username/?__a=1";
 
@@ -120,7 +134,7 @@ class FlutterInsta {
       external_url: profile["external_url"],
       is_private: profile["is_private"],
       is_verified: profile["is_verified"],
-      profile_pic_url: profile["profile_pic_url"],
+      profile_pic_url: profile["profile_pic_url_hd"],
       username: username,
     );
     return userProfile;

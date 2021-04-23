@@ -5,7 +5,7 @@ class InstaPost {
   final String postUrl;
   final String thumbnailUrl;
   final Dimensions thumbnailDimensions;
-  final String video_duration;
+  final PostTime video_duration;
   final PostUserDetails user;
   InstaPost(
       {this.postType,
@@ -18,7 +18,6 @@ class InstaPost {
       this.thumbnailUrl});
 }
 
-//followers: profile["edge_followed_by"]
 class PostUserDetails {
   final String username;
   final String profile_pic_url;
@@ -68,4 +67,11 @@ class InstaProfileData {
       this.followers,
       this.bio,
       this.external_url});
+}
+
+class PostTime {
+  final String duration;
+  final String unit;
+
+  PostTime({this.duration, this.unit});
 }

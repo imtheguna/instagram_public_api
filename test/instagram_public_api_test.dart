@@ -14,19 +14,7 @@ void main() {
     for (int i = 0; i < post.length; i++) {
       print(post[i].postType);
       print(post[i].display_url);
-      print(post[i].video_duration);
+      print(post[i].video_duration.duration);
     }
-    // print(post[0].dimensions);
-    // print(post[0].display_url);
-    // print(post[0].postType);
-    // print(post[0].thumbnailDimensions);
-    // print(post[0].thumbnailUrl);
-    // print(post[0].user.followers);
-    // print(post[0].user.is_private);
-    // print(post[0].user.is_verified);
-    // print(post[0].user.posts);
-    // print(post[0].user.profile_pic_url);
-    // print(post[0]..user.username);
-    // print(post[0].video_duration);
   });
 }
