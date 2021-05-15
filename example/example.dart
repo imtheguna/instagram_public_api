@@ -5,29 +5,29 @@ Future<void> main() async {
   //Get Profile Details(must be public)
   InstaProfileData user = await insta.getProfileData("thefluttercommunity");
   print(user.username);
-  print(user.profile_pic_url);
+  print(user.profilePicURL);
   print(user.bio);
-  print(user.external_url);
+  print(user.externalURL);
   print(user.followers);
   print(user.following);
-  print(user.is_verified);
-  print(user.is_private);
+  print(user.isVerified);
+  print(user.isPrivate);
   print(user.username);
   //Get Post Details (Post with nested images and video and details) (must be public)
   final List<InstaPost> post = await FlutterInsta().getPostData(
       "https://www.instagram.com/p/CNuL9idBnsA/?utm_source=ig_web_copy_link");
   for (int i = 0; i < post.length; i++) {
     print(post[i].dimensions);
-    print(post[i].display_url); //post download url
+    print(post[i].displayURL); //post download url
     print(post[i].postType);
     print(post[i].thumbnailDimensions);
     print(post[i].thumbnailUrl);
     print(post[i].user.followers);
-    print(post[i].user.is_private);
-    print(post[i].user.is_verified);
+    print(post[i].user.isPrivate);
+    print(post[i].user.isVerified);
     print(post[i].user.posts);
-    print(post[i].user.profile_pic_url);
+    print(post[i].user.profilePicURL);
     print(post[i]..user.username);
-    print(post[i].video_duration);
+    print(post[i].videoDuration);
   }
 }

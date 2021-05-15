@@ -4,8 +4,11 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:instagram_public_api/models/instaData.dart';
 
+///[FlutterInsta]
 class FlutterInsta {
+  ///return video duration
   PostTime secToMin(double time) {
+    ///if time is 0 return value is 0.0s
     if (time == 0 || time == null) {
       return PostTime(duration: "0.0", unit: "S");
     }
@@ -18,11 +21,15 @@ class FlutterInsta {
       double sanp = time / 60;
       return PostTime(duration: sanp.toStringAsFixed(2), unit: "M");
     }
+
+    ///return[videoDuration]
+    return PostTime(duration: "0.0", unit: "S");
   }
 
   ///get post details [post] must be publicc
   Future<List<InstaPost>> getPostData(String link) async {
     final url = "$link/?__a=1";
+    List<InstaPost> instaPost = [];
     List listUrl = url.split("/");
     String postUrl = listUrl[0] +
         "//" +
@@ -43,12 +50,13 @@ class FlutterInsta {
     }
     var post = json.decode(body)["graphql"]["shortcode_media"];
 
+    ///[PostUserDetails]
     PostUserDetails user = PostUserDetails(
       followers: post["owner"]["edge_followed_by"]["count"].toString(),
-      is_private: post["owner"]["is_private"],
-      is_verified: post["owner"]["is_verified"],
+      isPrivate: post["owner"]["is_private"],
+      isVerified: post["owner"]["is_verified"],
       posts: post["owner"]["edge_owner_to_timeline_media"]["count"].toString(),
-      profile_pic_url: post["owner"]["profile_pic_url"],
+      profilePicURL: post["owner"]["profile_pic_url"],
       username: post["owner"]["username"],
     );
 
@@ -58,10 +66,10 @@ class FlutterInsta {
           ? PostType.GraphImage
           : PostType.GraphVideo;
 
-      List<InstaPost> instaPost = [];
+      instaPost = [];
       instaPost.add(InstaPost(
           postUrl: postUrl,
-          video_duration: postType == PostType.GraphVideo
+          videoDuration: postType == PostType.GraphVideo
               ? secToMin(post["video_duration"])
               : secToMin(0.0),
           thumbnailDimensions: Dimensions(
@@ -73,14 +81,14 @@ class FlutterInsta {
             width: post["dimensions"]["width"],
           ),
           thumbnailUrl: post["display_resources"][0]["src"],
-          display_url: postType == PostType.GraphVideo
+          displayURL: postType == PostType.GraphVideo
               ? post["video_url"]
               : post["display_url"],
           postType: postType,
           user: user));
       return instaPost;
     } else if (post["__typename"] == "GraphSidecar") {
-      List<InstaPost> instaPost = [];
+      instaPost = [];
       final snap = post["edge_sidecar_to_children"]["edges"];
       for (int i = 0; i < snap.length.toInt(); i++) {
         final postType =
@@ -91,7 +99,7 @@ class FlutterInsta {
         print("\n\n");
         instaPost.add(InstaPost(
           postUrl: postUrl,
-          video_duration: postType == PostType.GraphVideo
+          videoDuration: postType == PostType.GraphVideo
               ? secToMin(snap[i]["node"]["video_duration"])
               : secToMin(0.0),
           thumbnailDimensions: Dimensions(
@@ -103,15 +111,16 @@ class FlutterInsta {
             width: snap[i]["node"]["dimensions"]["width"],
           ),
           thumbnailUrl: snap[i]["node"]["display_resources"][0]["src"],
-          display_url: postType == PostType.GraphImage
+          displayURL: postType == PostType.GraphImage
               ? snap[i]["node"]["display_url"]
               : snap[i]["node"]["video_url"],
           postType: postType,
           user: user,
         ));
       }
-      return instaPost;
     }
+
+    return instaPost;
   }
 
   ///get profile details [username] must be public
@@ -131,12 +140,14 @@ class FlutterInsta {
       bio: profile["biography"],
       following: profile["edge_follow"]["count"].toString(),
       followers: profile["edge_followed_by"]["count"].toString(),
-      external_url: profile["external_url"],
-      is_private: profile["is_private"],
-      is_verified: profile["is_verified"],
-      profile_pic_url: profile["profile_pic_url_hd"],
+      externalURL: profile["external_url"],
+      isPrivate: profile["is_private"],
+      isVerified: profile["is_verified"],
+      profilePicURL: profile["profile_pic_url_hd"],
       username: username,
     );
+
+    /// Returns Basic info
     return userProfile;
   }
 }
