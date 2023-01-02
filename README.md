@@ -71,6 +71,8 @@ bloggerAPI.getAllPageFromBlog(
 
 Return Type `Future<PageModel>`
 
+`Author` and `Replies`  included in `PostItemModel` so can you read author and replies from Posts
+
 ### Project Created & Maintained By
 
 ### Gunanithi
